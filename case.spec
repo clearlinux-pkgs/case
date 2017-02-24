@@ -5,11 +5,11 @@
 # Source0 file verified with key 0xE02B14E5030A2708 (security@celeryproject.org)
 #
 Name     : case
-Version  : 1.5.2
-Release  : 9
-URL      : http://pypi.debian.net/case/case-1.5.2.tar.gz
-Source0  : http://pypi.debian.net/case/case-1.5.2.tar.gz
-Source99 : http://pypi.debian.net/case/case-1.5.2.tar.gz.asc
+Version  : 1.5.3
+Release  : 10
+URL      : http://pypi.debian.net/case/case-1.5.3.tar.gz
+Source0  : http://pypi.debian.net/case/case-1.5.3.tar.gz
+Source99 : http://pypi.debian.net/case/case-1.5.3.tar.gz.asc
 Summary  : Python unittest Utilities
 Group    : Development/Tools
 License  : BSD-3-Clause
@@ -43,11 +43,11 @@ python components for the case package.
 
 
 %prep
-%setup -q -n case-1.5.2
+%setup -q -n case-1.5.3
 
 %build
 export LANG=C
-export SOURCE_DATE_EPOCH=1487946343
+export SOURCE_DATE_EPOCH=1487946639
 python2 setup.py build -b py2
 python3 setup.py build -b py3
 
@@ -57,7 +57,7 @@ export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 PYTHONPATH=%{buildroot}/usr/lib/python2.7/site-packages python2 setup.py test
 %install
-export SOURCE_DATE_EPOCH=1487946343
+export SOURCE_DATE_EPOCH=1487946639
 rm -rf %{buildroot}
 python2 -tt setup.py build -b py2 install --root=%{buildroot} --force
 python3 -tt setup.py build -b py3 install --root=%{buildroot} --force
