@@ -6,7 +6,7 @@
 #
 Name     : case
 Version  : 1.5.3
-Release  : 11
+Release  : 12
 URL      : http://pypi.debian.net/case/case-1.5.3.tar.gz
 Source0  : http://pypi.debian.net/case/case-1.5.3.tar.gz
 Source99 : http://pypi.debian.net/case/case-1.5.3.tar.gz.asc
