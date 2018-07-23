@@ -6,66 +6,98 @@
 #
 Name     : case
 Version  : 1.5.3
-Release  : 12
-URL      : http://pypi.debian.net/case/case-1.5.3.tar.gz
-Source0  : http://pypi.debian.net/case/case-1.5.3.tar.gz
-Source99 : http://pypi.debian.net/case/case-1.5.3.tar.gz.asc
+Release  : 13
+URL      : https://files.pythonhosted.org/packages/31/5a/9f1040ffb91e62c7ed6068dab6da5e1cb9ca3642d9b63c2254c3393af483/case-1.5.3.tar.gz
+Source0  : https://files.pythonhosted.org/packages/31/5a/9f1040ffb91e62c7ed6068dab6da5e1cb9ca3642d9b63c2254c3393af483/case-1.5.3.tar.gz
+Source99 : https://files.pythonhosted.org/packages/31/5a/9f1040ffb91e62c7ed6068dab6da5e1cb9ca3642d9b63c2254c3393af483/case-1.5.3.tar.gz.asc
 Summary  : Python unittest Utilities
 Group    : Development/Tools
 License  : BSD-3-Clause
+Requires: case-python3
+Requires: case-license
 Requires: case-python
 Requires: nose
 Requires: python-mock
 Requires: setuptools
 Requires: six
 Requires: unittest2
-BuildRequires : coverage-python
-BuildRequires : nose-python
+BuildRequires : buildreq-distutils3
+BuildRequires : coverage
+BuildRequires : nose
 BuildRequires : pbr
 BuildRequires : pip
-BuildRequires : python-dev
 BuildRequires : python-mock
 BuildRequires : python3-dev
 BuildRequires : setuptools
 BuildRequires : unittest2-python
 
 %description
-=====================================================================
 Python unittest utilities
-=====================================================================
+        =====================================================================
+        
+        |build-status| |coverage| |license| |wheel| |pyversion| |pyimp|
+
+%package license
+Summary: license components for the case package.
+Group: Default
+
+%description license
+license components for the case package.
+
 
 %package python
 Summary: python components for the case package.
 Group: Default
+Requires: case-python3
 
 %description python
 python components for the case package.
+
+
+%package python3
+Summary: python3 components for the case package.
+Group: Default
+Requires: python3-core
+
+%description python3
+python3 components for the case package.
 
 
 %prep
 %setup -q -n case-1.5.3
 
 %build
+export http_proxy=http://127.0.0.1:9/
+export https_proxy=http://127.0.0.1:9/
+export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1489770090
-python2 setup.py build -b py2
+export SOURCE_DATE_EPOCH=1532377512
 python3 setup.py build -b py3
 
 %check
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
-PYTHONPATH=%{buildroot}/usr/lib/python3.6/site-packages python3 setup.py test
+PYTHONPATH=%{buildroot}/usr/lib/python3.7/site-packages python3 setup.py test
 %install
-export SOURCE_DATE_EPOCH=1489770090
 rm -rf %{buildroot}
-python2 -tt setup.py build -b py2 install --root=%{buildroot} --force
-python3 -tt setup.py build -b py3 install --root=%{buildroot} --force
+mkdir -p %{buildroot}/usr/share/doc/case
+cp LICENSE %{buildroot}/usr/share/doc/case/LICENSE
+python3 -tt setup.py build -b py3 install --root=%{buildroot}
+echo ----[ mark ]----
+cat %{buildroot}/usr/lib/python3*/site-packages/*/requires.txt || :
+echo ----[ mark ]----
 
 %files
 %defattr(-,root,root,-)
 
+%files license
+%defattr(-,root,root,-)
+/usr/share/doc/case/LICENSE
+
 %files python
 %defattr(-,root,root,-)
-/usr/lib/python2*/*
+
+%files python3
+%defattr(-,root,root,-)
 /usr/lib/python3*/*
