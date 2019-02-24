@@ -6,16 +6,16 @@
 #
 Name     : case
 Version  : 1.5.3
-Release  : 14
+Release  : 15
 URL      : https://files.pythonhosted.org/packages/31/5a/9f1040ffb91e62c7ed6068dab6da5e1cb9ca3642d9b63c2254c3393af483/case-1.5.3.tar.gz
 Source0  : https://files.pythonhosted.org/packages/31/5a/9f1040ffb91e62c7ed6068dab6da5e1cb9ca3642d9b63c2254c3393af483/case-1.5.3.tar.gz
 Source99 : https://files.pythonhosted.org/packages/31/5a/9f1040ffb91e62c7ed6068dab6da5e1cb9ca3642d9b63c2254c3393af483/case-1.5.3.tar.gz.asc
 Summary  : Python unittest Utilities
 Group    : Development/Tools
 License  : BSD-3-Clause
-Requires: case-python3
-Requires: case-license
-Requires: case-python
+Requires: case-license = %{version}-%{release}
+Requires: case-python = %{version}-%{release}
+Requires: case-python3 = %{version}-%{release}
 Requires: nose
 Requires: python-mock
 Requires: setuptools
@@ -24,18 +24,13 @@ Requires: unittest2
 BuildRequires : buildreq-distutils3
 BuildRequires : coverage
 BuildRequires : nose
-BuildRequires : pbr
-BuildRequires : pip
 BuildRequires : python-mock
-BuildRequires : python3-dev
-BuildRequires : setuptools
 BuildRequires : unittest2-python
 
 %description
+=====================================================================
 Python unittest utilities
-        =====================================================================
-        
-        |build-status| |coverage| |license| |wheel| |pyversion| |pyimp|
+=====================================================================
 
 %package license
 Summary: license components for the case package.
@@ -48,7 +43,7 @@ license components for the case package.
 %package python
 Summary: python components for the case package.
 Group: Default
-Requires: case-python3
+Requires: case-python3 = %{version}-%{release}
 
 %description python
 python components for the case package.
@@ -71,8 +66,9 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1532377512
-python3 setup.py build -b py3
+export SOURCE_DATE_EPOCH=1551038628
+export MAKEFLAGS=%{?_smp_mflags}
+python3 setup.py build
 
 %check
 export http_proxy=http://127.0.0.1:9/
@@ -81,9 +77,9 @@ export no_proxy=localhost,127.0.0.1,0.0.0.0
 PYTHONPATH=%{buildroot}/usr/lib/python3.7/site-packages python3 setup.py test
 %install
 rm -rf %{buildroot}
-mkdir -p %{buildroot}/usr/share/doc/case
-cp LICENSE %{buildroot}/usr/share/doc/case/LICENSE
-python3 -tt setup.py build -b py3 install --root=%{buildroot}
+mkdir -p %{buildroot}/usr/share/package-licenses/case
+cp LICENSE %{buildroot}/usr/share/package-licenses/case/LICENSE
+python3 -tt setup.py build  install --root=%{buildroot}
 echo ----[ mark ]----
 cat %{buildroot}/usr/lib/python3*/site-packages/*/requires.txt || :
 echo ----[ mark ]----
@@ -92,8 +88,8 @@ echo ----[ mark ]----
 %defattr(-,root,root,-)
 
 %files license
-%defattr(-,root,root,-)
-/usr/share/doc/case/LICENSE
+%defattr(0644,root,root,0755)
+/usr/share/package-licenses/case/LICENSE
 
 %files python
 %defattr(-,root,root,-)
