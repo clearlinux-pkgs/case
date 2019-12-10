@@ -6,10 +6,10 @@
 #
 Name     : case
 Version  : 1.5.3
-Release  : 18
+Release  : 19
 URL      : https://files.pythonhosted.org/packages/31/5a/9f1040ffb91e62c7ed6068dab6da5e1cb9ca3642d9b63c2254c3393af483/case-1.5.3.tar.gz
 Source0  : https://files.pythonhosted.org/packages/31/5a/9f1040ffb91e62c7ed6068dab6da5e1cb9ca3642d9b63c2254c3393af483/case-1.5.3.tar.gz
-Source99 : https://files.pythonhosted.org/packages/31/5a/9f1040ffb91e62c7ed6068dab6da5e1cb9ca3642d9b63c2254c3393af483/case-1.5.3.tar.gz.asc
+Source1  : https://files.pythonhosted.org/packages/31/5a/9f1040ffb91e62c7ed6068dab6da5e1cb9ca3642d9b63c2254c3393af483/case-1.5.3.tar.gz.asc
 Summary  : Python unittest Utilities
 Group    : Development/Tools
 License  : BSD-3-Clause
@@ -25,12 +25,16 @@ BuildRequires : buildreq-distutils3
 BuildRequires : coverage
 BuildRequires : nose
 BuildRequires : python-mock
+BuildRequires : setuptools
+BuildRequires : six
+BuildRequires : unittest2
 BuildRequires : unittest2-python
 
 %description
-=====================================================================
 Python unittest utilities
-=====================================================================
+        =====================================================================
+        
+        |build-status| |coverage| |license| |wheel| |pyversion| |pyimp|
 
 %package license
 Summary: license components for the case package.
@@ -60,13 +64,19 @@ python3 components for the case package.
 
 %prep
 %setup -q -n case-1.5.3
+cd %{_builddir}/case-1.5.3
 
 %build
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
-export LANG=C
-export SOURCE_DATE_EPOCH=1551038628
+export LANG=C.UTF-8
+export SOURCE_DATE_EPOCH=1576008971
+export GCC_IGNORE_WERROR=1
+export CFLAGS="$CFLAGS -fno-lto "
+export FCFLAGS="$CFLAGS -fno-lto "
+export FFLAGS="$CFLAGS -fno-lto "
+export CXXFLAGS="$CXXFLAGS -fno-lto "
 export MAKEFLAGS=%{?_smp_mflags}
 python3 setup.py build
 
@@ -74,11 +84,12 @@ python3 setup.py build
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
-PYTHONPATH=%{buildroot}/usr/lib/python3.7/site-packages python3 setup.py test
+PYTHONPATH=%{buildroot}$(python -c "import sys; print(sys.path[-1])") python setup.py test
 %install
+export MAKEFLAGS=%{?_smp_mflags}
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/case
-cp LICENSE %{buildroot}/usr/share/package-licenses/case/LICENSE
+cp %{_builddir}/case-1.5.3/LICENSE %{buildroot}/usr/share/package-licenses/case/ddd4bd958c52e8beea1fb6184e6a327b6ea42e3b
 python3 -tt setup.py build  install --root=%{buildroot}
 echo ----[ mark ]----
 cat %{buildroot}/usr/lib/python3*/site-packages/*/requires.txt || :
@@ -89,7 +100,7 @@ echo ----[ mark ]----
 
 %files license
 %defattr(0644,root,root,0755)
-/usr/share/package-licenses/case/LICENSE
+/usr/share/package-licenses/case/ddd4bd958c52e8beea1fb6184e6a327b6ea42e3b
 
 %files python
 %defattr(-,root,root,-)
